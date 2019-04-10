@@ -4,9 +4,9 @@
  * npm i express
  */
 
- /**2) to run this app:
-  * node index.js
-  */
+/**2) to run this app:
+ * node index.js
+ */
 
 //   3) nodemon
 //   =======
@@ -18,16 +18,19 @@
 
 
 // coding with mosh nodeJS vid 44 on REST API and expressJS
-const express=require ('express');
-const app=express();
+const express = require('express');
+const app = express();
 
 //url path,call back function
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
     res.send('hello world xxxx');
 });
 
-app.get('/api/courses',(req,res)=>{
-    res.send([1,2,3]);
+app.get('/api/courses', (req, res) => {
+    res.send([1, 2, 33]);
 });
 
-app.listen(3000,()=>{console.log('SERVER:Listening on port 3000')})
+
+//PORT ENV variable
+const port = process.env.PORT || 3000;
+app.listen(port, () => { console.log(`SERVER:Listening on port ${port}`) })
