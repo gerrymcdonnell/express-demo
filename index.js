@@ -21,6 +21,9 @@
 const express = require('express');
 const app = express();
 
+//uses middleware
+app.use(express.json());
+
 const courses=[
     {id:1,name:'course1'},
     {id:2,name:'course2'},
@@ -32,9 +35,22 @@ app.get('/', (req, res) => {
     res.send('hello world xxxx');
 });
 
-app.get('/api/courses', (req, res) => {
+
+/*app.get('/api/courses', (req, res) => {
     res.send([1, 2, 33]);
+});*/
+
+
+//post example vid 49
+app.post('/api/courses',(req,res)=>{
+    const course={
+        id:courses.length+1,
+        name:req.body.name
+    }
+    courses.push(course);
+    res.send(course);
 });
+
 
 //parameter vid 47
 app.get('/api/courses/:id', (req, res) => {
@@ -44,7 +60,7 @@ app.get('/api/courses/:id', (req, res) => {
     //note can also use let instead of const
     const course=courses.find(c=>c.id===parseInt(req.params.id));
     //not found 404 resource donest exist on server
-    if(!course) res.status(404).send('The course wanst found');
+    if(!course) res.status(404).send('The course wasnt found');
     res.send(course);
 });
 
