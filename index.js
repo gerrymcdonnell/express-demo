@@ -21,6 +21,12 @@
 const express = require('express');
 const app = express();
 
+const courses=[
+    {id:1,name:'course1'},
+    {id:2,name:'course2'},
+    {id:3,name:'course3'}
+];
+
 //url path,call back function
 app.get('/', (req, res) => {
     res.send('hello world xxxx');
@@ -30,9 +36,16 @@ app.get('/api/courses', (req, res) => {
     res.send([1, 2, 33]);
 });
 
-//parameter
+//parameter vid 47
 app.get('/api/courses/:id', (req, res) => {
-    res.send(req.params.id);
+    
+    //res.send(req.params.id);
+    
+    //note can also use let instead of const
+    const course=courses.find(c=>c.id===parseInt(req.params.id));
+    //not found 404 resource donest exist on server
+    if(!course) res.status(404).send('The course wanst found');
+    res.send(course);
 });
 
 
