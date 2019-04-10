@@ -30,6 +30,11 @@ app.get('/api/courses', (req, res) => {
     res.send([1, 2, 33]);
 });
 
+//parameter
+app.get('/api/courses/:id', (req, res) => {
+    res.send(req.params.id);
+});
+
 
 //PORT ENV variable
 const port = process.env.PORT || 3000;
