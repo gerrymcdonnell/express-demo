@@ -48,19 +48,18 @@ app.post('/api/courses', (req, res) => {
 
     //jio schema
     const schema = {
-        name: Joi.strict().min(3).required()
+        name: Joi.string().min(3).required()
     };
 
     const result = Joi.validate(req.body, schema);
     console.log(result);
 
     //validation
-    /**if the name doest exist or the names length <3 chars then return a 400 status code
-     * returning a 400 status code is REST convention i.e bad request
+    /** return a 400 status code if Joi picks up an error     * 
      */
-    if (!req.body.name || req.body.name.length < 3) {
+    if (result.error) {
         //return bad request
-        res.status(400).send('Name required and should be a minimum of 3 chars');
+        res.status(400).send(result.error.details[0].message);
         return;
     }
 
