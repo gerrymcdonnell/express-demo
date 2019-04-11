@@ -43,11 +43,20 @@ app.get('/', (req, res) => {
 
 //post example vid 49
 app.post('/api/courses',(req,res)=>{
+    
+    // create new course from data being posted
+    // the id is made up oj just adding 1 to number of courses we have
+    // the name propery/field should be in the request body.
+    // note requires Json parse feature enaabled in expressJS
+    // i.e see app.use(express.json()); above
     const course={
         id:courses.length+1,
         name:req.body.name
     }
+    
+    //push new course to array
     courses.push(course);
+    // by convention posting an new object should be returned din the body of the response
     res.send(course);
 });
 
