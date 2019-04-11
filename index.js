@@ -34,7 +34,7 @@ const courses = [
 
 //url path,call back function
 app.get('/', (req, res) => {
-    res.send('hello world');
+    res.send(courses);
 });
 
 
@@ -43,20 +43,52 @@ app.get('/', (req, res) => {
 });*/
 
 
-//post example vid 49-51
-app.post('/api/courses', (req, res) => {
+//vid 52 put request which is an edit
+app.put('/api/courses/:is',(req,res)=>{
+    //look up course if doest exists 404 
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    //not found 404 resource donest exist on server
+    if (!course) res.status(404).send('The course wasnt found');
 
-    //jio schema
+    //validate if invale return 400 bad request
+    const result=validateCourse(req.body);
+    
+    //object destructuring
+    //const{error}=validateCourse(req.body);
+
+    if (result.error) {
+        //return bad request
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
+    //update course and return the updated course
+    course.name=req.body.name;
+    res.send(course);
+})
+
+
+
+function validateCourse(course){
+    
     const schema = {
         name: Joi.string().min(3).required()
     };
+    
+    return result = Joi.validate(course, schema);
+}
 
-    const result = Joi.validate(req.body, schema);
-    console.log(result);
 
-    //validation
-    /** return a 400 status code if Joi picks up an error     * 
-     */
+
+//post example vid 49-51
+app.post('/api/courses', (req, res) => {
+
+    //validate if invale return 400 bad request
+    const result=validateCourse(req.body);
+
+    //object destructuring
+    //const{error}=validateCourse(req.body);
+
     if (result.error) {
         //return bad request
         res.status(400).send(result.error.details[0].message);
