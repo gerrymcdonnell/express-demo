@@ -24,10 +24,10 @@ const app = express();
 //uses middleware
 app.use(express.json());
 
-const courses=[
-    {id:1,name:'course1'},
-    {id:2,name:'course2'},
-    {id:3,name:'course3'}
+const courses = [
+    { id: 1, name: 'course1' },
+    { id: 2, name: 'course2' },
+    { id: 3, name: 'course3' }
 ];
 
 //url path,call back function
@@ -42,18 +42,28 @@ app.get('/', (req, res) => {
 
 
 //post example vid 49
-app.post('/api/courses',(req,res)=>{
-    
+app.post('/api/courses', (req, res) => {
+
+    //validation
+    /**if the name doest exist or the names length <3 chars then return a 400 status code
+     * returning a 400 status code is REST convention i.e bad request
+     */
+    if (!req.body.name || req.body.name.length < 3) {
+        //return bad request
+        res.status(400).send('Name required and should be a minimum of 3 chars');
+        return;
+    }
+
     // create new course from data being posted
     // the id is made up oj just adding 1 to number of courses we have
     // the name propery/field should be in the request body.
     // note requires Json parse feature enaabled in expressJS
     // i.e see app.use(express.json()); above
-    const course={
-        id:courses.length+1,
-        name:req.body.name
+    const course = {
+        id: courses.length + 1,
+        name: req.body.name
     }
-    
+
     //push new course to array
     courses.push(course);
     // by convention posting an new object should be returned din the body of the response
@@ -63,13 +73,13 @@ app.post('/api/courses',(req,res)=>{
 
 //parameter vid 47
 app.get('/api/courses/:id', (req, res) => {
-    
+
     //res.send(req.params.id);
-    
+
     //note can also use let instead of const
-    const course=courses.find(c=>c.id===parseInt(req.params.id));
+    const course = courses.find(c => c.id === parseInt(req.params.id));
     //not found 404 resource donest exist on server
-    if(!course) res.status(404).send('The course wasnt found');
+    if (!course) res.status(404).send('The course wasnt found');
     res.send(course);
 });
 
