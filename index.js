@@ -19,6 +19,8 @@
 
 // coding with mosh nodeJS vid 44 on REST API and expressJS
 const express = require('express');
+const Joi = require('joi');
+
 const app = express();
 
 //uses middleware
@@ -32,7 +34,7 @@ const courses = [
 
 //url path,call back function
 app.get('/', (req, res) => {
-    res.send('hello world xxxx');
+    res.send('hello world');
 });
 
 
@@ -41,8 +43,16 @@ app.get('/', (req, res) => {
 });*/
 
 
-//post example vid 49
+//post example vid 49-51
 app.post('/api/courses', (req, res) => {
+
+    //jio schema
+    const schema = {
+        name: Joi.strict().min(3).required()
+    };
+
+    const result = Joi.validate(req.body, schema);
+    console.log(result);
 
     //validation
     /**if the name doest exist or the names length <3 chars then return a 400 status code
@@ -86,4 +96,7 @@ app.get('/api/courses/:id', (req, res) => {
 
 //PORT ENV variable
 const port = process.env.PORT || 3000;
-app.listen(port, () => { console.log(`SERVER:Listening on port ${port}`) })
+app.listen(port, () => { 
+    console.log(`SERVER:Listening on port ${port}`);
+    console.log(`API endpoint: http://localhost:${port}/api/courses`) 
+})
