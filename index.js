@@ -25,12 +25,21 @@ const Joi = require('joi');
 
 const app = express();
 
+//environments
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+console.log('app.get(env):',app.get('env'));
+
 //uses middleware to parse json objects
 app.use(express.json());
 //helmet middleware
 app.use(helmet());
-//morgan middleware
-app.use(morgan('tiny'));
+
+//morgan middleware logs http requests. only use it development mode
+if (app.get('env')==='development'){
+    app.use(morgan('tiny'));
+    console.log('Middleware: morgan enabled: Logging Http requests');
+}
+
 
 //array of course objects
 const courses = [
