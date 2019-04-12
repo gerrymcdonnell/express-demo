@@ -18,14 +18,21 @@
 
 
 // coding with mosh nodeJS vid 44 on REST API and expressJS
+const morgan=require('morgan');
+const helmet=require('helmet');
 const express = require('express');
 const Joi = require('joi');
 
 const app = express();
 
-//uses middleware
+//uses middleware to parse json objects
 app.use(express.json());
+//helmet middleware
+app.use(helmet());
+//morgan middleware
+app.use(morgan('tiny'));
 
+//array of course objects
 const courses = [
     { id: 1, name: 'course1' },
     { id: 2, name: 'course2' },
