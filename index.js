@@ -31,16 +31,21 @@ const app = express();
  * export app_password=test1234
  */
 console.log('App Name', config.get('name'));
-console.log('Mail Password', config.get('mail.password','default'));
+console.log('Mail Password', config.get('mail.password', 'default'));
 
 //environments
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 console.log('app.get(env):', app.get('env'));
 
+//pug template engine vid64
+app.set('view engine', 'pug');
+//app.set('views','./views'); //default value
+
 //uses middleware to parse json objects
 app.use(express.json());
 //helmet middleware
 app.use(helmet());
+
 
 //morgan middleware logs http requests. only use it development mode
 if (app.get('env') === 'development') {
@@ -57,9 +62,9 @@ const courses = [
 ];
 
 //url path,call back function
-/*app.get('/', (req, res) => {
-    res.send(courses);
-});*/
+app.get('/', (req, res) => {
+    res.render('index', { title: 'My express app', message: 'hello' });
+});
 
 
 app.get('/api/courses', (req, res) => {
