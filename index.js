@@ -18,16 +18,24 @@
 
 
 // coding with mosh nodeJS vid 44 on REST API and expressJS
-const morgan=require('morgan');
-const helmet=require('helmet');
+const morgan = require('morgan');
+const helmet = require('helmet');
 const express = require('express');
+const config = require('config');
 const Joi = require('joi');
 
 const app = express();
 
+//config module
+/**set env variable by
+ * export app_password=test1234
+ */
+console.log('App Name', config.get('name'));
+console.log('Mail Password', config.get('mail.password','default'));
+
 //environments
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
-console.log('app.get(env):',app.get('env'));
+console.log('app.get(env):', app.get('env'));
 
 //uses middleware to parse json objects
 app.use(express.json());
@@ -35,7 +43,7 @@ app.use(express.json());
 app.use(helmet());
 
 //morgan middleware logs http requests. only use it development mode
-if (app.get('env')==='development'){
+if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
     console.log('Middleware: morgan enabled: Logging Http requests');
 }
@@ -78,9 +86,9 @@ app.put('/api/courses/:id', (req, res) => {
     //const{error}=validateCourse(req.body);
 
     //return bad request
-    if (result.error)         
+    if (result.error)
         return res.status(400).send(result.error.details[0].message);
-    
+
 
     //update course and return the updated course
     course.name = req.body.name;
@@ -110,7 +118,7 @@ app.post('/api/courses', (req, res) => {
     //const{error}=validateCourse(req.body);
 
     //return bad request
-    if (result.error) {        
+    if (result.error) {
         return res.status(400).send(result.error.details[0].message);
     }
 
@@ -147,10 +155,10 @@ app.get('/api/courses/:id', (req, res) => {
 app.delete('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id));
     if (!course) return res.status(404).send('The course with the given ID was not found.');
-  
+
     const index = courses.indexOf(course);
     courses.splice(index, 1);
-  
+
     res.send(course);
 });
 
