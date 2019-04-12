@@ -25,7 +25,8 @@ const config = require('config');
 const Joi = require('joi');
 
 //import courses module
-const courses=require('./routes/courses')
+const courses=require('./routes/courses');
+const home=require('./routes/home');
 
 const app = express();
 
@@ -52,6 +53,8 @@ app.use(helmet());
 //any route using this url, use the courses module
 app.use('/api/courses',courses);
 
+//any path that starts with / use the home router
+app.use('/',home);
 
 //morgan middleware logs http requests. only use it development mode
 if (app.get('env') === 'development') {
@@ -60,10 +63,7 @@ if (app.get('env') === 'development') {
 }
 
 
-//url path,call back function
-app.get('/', (req, res) => {
-    res.render('index', { title: 'My express app', message: 'hello' });
-});
+
 
 
 
