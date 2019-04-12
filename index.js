@@ -27,6 +27,7 @@ const Joi = require('joi');
 //import courses module
 const courses=require('./routes/courses');
 const home=require('./routes/home');
+const genres=require('./routes/genres');
 
 const app = express();
 
@@ -52,6 +53,8 @@ app.use(helmet());
 
 //any route using this url, use the courses module
 app.use('/api/courses',courses);
+
+app.use('/api/genres',genres);
 
 //any path that starts with / use the home router
 app.use('/',home);
