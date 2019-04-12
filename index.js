@@ -53,7 +53,7 @@ app.put('/api/courses/:id', (req, res) => {
     //look up course if doest exists 404 
     const course = courses.find(c => c.id === parseInt(req.params.id));
     //not found 404 resource donest exist on server
-    if (!course) res.status(404).send('The course wasnt found');
+    if (!course) return res.status(404).send('The course wasnt found');
 
     //validate if invale return 400 bad request
     const result = validateCourse(req.body);
@@ -61,11 +61,10 @@ app.put('/api/courses/:id', (req, res) => {
     //object destructuring
     //const{error}=validateCourse(req.body);
 
-    if (result.error) {
-        //return bad request
-        res.status(400).send(result.error.details[0].message);
-        return;
-    }
+    //return bad request
+    if (result.error)         
+        return res.status(400).send(result.error.details[0].message);
+    
 
     //update course and return the updated course
     course.name = req.body.name;
@@ -94,10 +93,9 @@ app.post('/api/courses', (req, res) => {
     //object destructuring
     //const{error}=validateCourse(req.body);
 
-    if (result.error) {
-        //return bad request
-        res.status(400).send(result.error.details[0].message);
-        return;
+    //return bad request
+    if (result.error) {        
+        return res.status(400).send(result.error.details[0].message);
     }
 
     // create new course from data being posted
@@ -130,18 +128,15 @@ app.get('/api/courses/:id', (req, res) => {
 });
 
 //delte course id
-app.delete('api/courses/:id', (req, res) => {
-
-    //look up course if doest exists 404 
+app.delete('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('The course wasnt found');
-    
-    //get the index of the course array of courses and remove from array
+    if (!course) return res.status(404).send('The course with the given ID was not found.');
+  
     const index = courses.indexOf(course);
     courses.splice(index, 1);
-
+  
     res.send(course);
-})
+});
 
 
 //PORT ENV variable
