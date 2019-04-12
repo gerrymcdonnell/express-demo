@@ -33,7 +33,12 @@ const courses = [
 ];
 
 //url path,call back function
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
+    res.send(courses);
+});*/
+
+
+app.get('/api/courses', (req, res) => {
     res.send(courses);
 });
 
@@ -44,15 +49,15 @@ app.get('/', (req, res) => {
 
 
 //vid 52 put request which is an edit
-app.put('/api/courses/:is',(req,res)=>{
+app.put('/api/courses/:id', (req, res) => {
     //look up course if doest exists 404 
     const course = courses.find(c => c.id === parseInt(req.params.id));
     //not found 404 resource donest exist on server
     if (!course) res.status(404).send('The course wasnt found');
 
     //validate if invale return 400 bad request
-    const result=validateCourse(req.body);
-    
+    const result = validateCourse(req.body);
+
     //object destructuring
     //const{error}=validateCourse(req.body);
 
@@ -63,18 +68,18 @@ app.put('/api/courses/:is',(req,res)=>{
     }
 
     //update course and return the updated course
-    course.name=req.body.name;
+    course.name = req.body.name;
     res.send(course);
 })
 
 
 
-function validateCourse(course){
-    
+function validateCourse(course) {
+
     const schema = {
         name: Joi.string().min(3).required()
     };
-    
+
     return result = Joi.validate(course, schema);
 }
 
@@ -84,7 +89,7 @@ function validateCourse(course){
 app.post('/api/courses', (req, res) => {
 
     //validate if invale return 400 bad request
-    const result=validateCourse(req.body);
+    const result = validateCourse(req.body);
 
     //object destructuring
     //const{error}=validateCourse(req.body);
@@ -124,10 +129,24 @@ app.get('/api/courses/:id', (req, res) => {
     res.send(course);
 });
 
+//delte course id
+app.delete('api/courses/:id', (req, res) => {
+
+    //look up course if doest exists 404 
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) res.status(404).send('The course wasnt found');
+    
+    //get the index of the course array of courses and remove from array
+    const index = courses.indexOf(course);
+    courses.splice(index, 1);
+
+    res.send(course);
+})
+
 
 //PORT ENV variable
 const port = process.env.PORT || 3000;
-app.listen(port, () => { 
+app.listen(port, () => {
     console.log(`SERVER:Listening on port ${port}`);
-    console.log(`API endpoint: http://localhost:${port}/api/courses`) 
+    console.log(`API endpoint: http://localhost:${port}/api/courses`)
 })
